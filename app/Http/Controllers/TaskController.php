@@ -4,12 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TaskController extends Controller
 {
+    private const NORMALIZED_STATUSES = [
+        'In curs',
+        'Finalizata',
+        'Anulata',
+    ];
+
+    private const ACCEPTED_STATUSES = [
+        'In curs',
+        'Finalizata',
+        'Anulata',
+    ];
+
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = Task::latest()->get();
+
         return view('tasks.index', compact('tasks'));
     }
 
@@ -20,15 +34,17 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nume' => 'required',
-            'descriere' => 'required',
-            'stare' => 'required|in:În curs,Finalizată,Anulată',
+        $validated = $request->validate([
+            'nume' => ['required', 'string', 'max:255'],
+            'descriere' => ['required', 'string'],
+            'stare' => ['required', Rule::in(self::ACCEPTED_STATUSES)],
         ]);
 
-        Task::create($request->all());
+        $validated['stare'] = $this->normalizeStatus($validated['stare']);
 
-        return redirect()->route('tasks.index')->with('success', 'Activitate adăugată cu succes!');
+        Task::create($validated);
+
+        return redirect()->route('tasks.index')->with('success', 'Activitate adaugata cu succes.');
     }
 
     public function show(Task $task)
@@ -43,21 +59,38 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
-        $request->validate([
-            'nume' => 'required',
-            'descriere' => 'required',
-            'stare' => 'required|in:În curs,Finalizată,Anulată',
+        $validated = $request->validate([
+            'nume' => ['required', 'string', 'max:255'],
+            'descriere' => ['required', 'string'],
+            'stare' => ['required', Rule::in(self::ACCEPTED_STATUSES)],
         ]);
 
-        $task->update($request->all());
+        $validated['stare'] = $this->normalizeStatus($validated['stare']);
 
-        return redirect()->route('tasks.index')->with('success', 'Activitate actualizată!');
+        $task->update($validated);
+
+        return redirect()->route('tasks.index')->with('success', 'Activitate actualizata cu succes.');
     }
 
     public function destroy(Task $task)
     {
         $task->delete();
 
-        return redirect()->route('tasks.index')->with('success', 'Activitate ștearsă!');
+        return redirect()->route('tasks.index')->with('success', 'Activitate stearsa cu succes.');
+    }
+
+    private function normalizeStatus(string $status): string
+    {
+        $statusKey = strtolower($status);
+
+        if (str_contains($statusKey, 'final')) {
+            return self::NORMALIZED_STATUSES[1];
+        }
+
+        if (str_contains($statusKey, 'anulat')) {
+            return self::NORMALIZED_STATUSES[2];
+        }
+
+        return self::NORMALIZED_STATUSES[0];
     }
 }

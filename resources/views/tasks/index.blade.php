@@ -8,6 +8,37 @@
     </a>
 </div>
 
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="GET" action="{{ route('tasks.index') }}" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="search" class="form-label">Căutare</label>
+                <input
+                    type="text"
+                    name="search"
+                    id="search"
+                    class="form-control"
+                    placeholder="Caută după nume sau descriere"
+                    value="{{ $validated['search'] ?? '' }}"
+                >
+            </div>
+            <div class="col-md-2">
+                <label for="stare" class="form-label">Filtrare stare</label>
+                <select name="stare" id="stare" class="form-select">
+                    <option value="">Toate</option>
+                    <option value="În curs" {{ ($validated['stare'] ?? '') === 'În curs' ? 'selected' : '' }}>În curs</option>
+                    <option value="Finalizată" {{ ($validated['stare'] ?? '') === 'Finalizată' ? 'selected' : '' }}>Finalizată</option>
+                    <option value="Anulată" {{ ($validated['stare'] ?? '') === 'Anulată' ? 'selected' : '' }}>Anulată</option>
+                </select>
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100">Aplică</button>
+                <a href="{{ route('tasks.index') }}" class="btn btn-outline-secondary w-100">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="card border-0 shadow-sm">
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -23,7 +54,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($tasks as $task)
+                    @forelse($tasks as $task)
                     <tr>
                         <td class="ps-4 text-muted">{{ $task->id }}</td>
                         <td>
@@ -55,7 +86,11 @@
                             </div>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">Nu există taskuri care să corespundă filtrelor selectate.</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

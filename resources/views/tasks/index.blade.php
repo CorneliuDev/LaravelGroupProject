@@ -18,6 +18,7 @@
                         <th>Nume Activitate</th>
                         <th>Stare</th>
                         <th>Creat la</th>
+                        <th>Editat la</th>
                         <th class="text-end pe-4">Acțiuni</th>
                     </tr>
                 </thead>
@@ -40,6 +41,9 @@
                             @endif
                         </td>
                         <td class="text-muted small">{{ $task->created_at->format('d/m/Y') }}</td>
+                        <td class="text-muted small">
+                            {{ $task->updated_at->ne($task->created_at) ? $task->updated_at->format('d/m/Y') : '-' }}
+                        </td>
                         <td class="text-end pe-4">
                             <div class="d-flex justify-content-end gap-2">
                                 <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-outline-warning">Editează</a>

@@ -4,21 +4,21 @@
 
 @section('content')
 @php
-    $statusOptions = ['In curs', 'Finalizata', 'Anulata'];
-    $statusKey = strtolower((string) $task->stare);
-    $taskStatus = 'In curs';
+    $statusOptions = ['În curs', 'Finalizată', 'Anulată'];
+    $statusKey = \Illuminate\Support\Str::of((string) $task->stare)->lower()->ascii()->value();
+    $taskStatus = 'În curs';
 
     if (str_contains($statusKey, 'final')) {
-        $taskStatus = 'Finalizata';
+        $taskStatus = 'Finalizată';
     } elseif (str_contains($statusKey, 'anulat')) {
-        $taskStatus = 'Anulata';
+        $taskStatus = 'Anulată';
     }
 @endphp
 
 <section class="page-hero fade-up">
     <span class="page-eyebrow">Actualizare task</span>
-    <h1 class="page-title">Editeaza activitatea #{{ $task->id }}</h1>
-    <p class="page-subtitle">Ajusteaza informatiile pentru a pastra progresul proiectului mereu actualizat.</p>
+    <h1 class="page-title">Editează activitatea #{{ $task->id }}</h1>
+    <p class="page-subtitle">Ajustează informațiile pentru a păstra progresul proiectului mereu actualizat.</p>
 </section>
 
 <div class="row justify-content-center">
@@ -26,7 +26,7 @@
         <section class="content-card form-card fade-up">
             @if($errors->any())
                 <div class="alert alert-danger" role="alert">
-                    <strong>Exista cateva campuri invalide:</strong>
+                    <strong>Există câteva câmpuri invalide:</strong>
                     <ul class="mb-0 mt-2">
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -59,8 +59,8 @@
                 </div>
 
                 <div class="col-12 d-flex flex-wrap justify-content-end gap-2 pt-2">
-                    <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-outline-secondary px-4">Inapoi</a>
-                    <button type="submit" class="btn btn-brand px-4">Salveaza modificarile</button>
+                    <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-outline-secondary px-4">Înapoi</a>
+                    <button type="submit" class="btn btn-brand px-4">Salvează modificările</button>
                 </div>
             </form>
         </section>

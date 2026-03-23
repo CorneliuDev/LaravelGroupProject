@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class TaskController extends Controller
@@ -15,6 +16,9 @@ class TaskController extends Controller
     ];
 
     private const ACCEPTED_STATUSES = [
+        'În curs',
+        'Finalizată',
+        'Anulată',
         'In curs',
         'Finalizata',
         'Anulata',
@@ -81,7 +85,7 @@ class TaskController extends Controller
 
     private function normalizeStatus(string $status): string
     {
-        $statusKey = strtolower($status);
+        $statusKey = Str::of($status)->lower()->ascii()->value();
 
         if (str_contains($statusKey, 'final')) {
             return self::NORMALIZED_STATUSES[1];

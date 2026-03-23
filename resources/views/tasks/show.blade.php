@@ -5,26 +5,26 @@
 @section('content')
 @php
     $statusText = (string) $task->stare;
-    $statusKey = strtolower($statusText);
+    $statusKey = \Illuminate\Support\Str::of($statusText)->lower()->ascii()->value();
     $statusClass = 'status-pill status-pill--progress';
-    $statusLabel = 'In curs';
+    $statusLabel = 'În curs';
 
     if (str_contains($statusKey, 'final')) {
         $statusClass = 'status-pill status-pill--done';
-        $statusLabel = 'Finalizata';
+        $statusLabel = 'Finalizată';
     } elseif (str_contains($statusKey, 'anulat')) {
         $statusClass = 'status-pill status-pill--cancel';
-        $statusLabel = 'Anulata';
+        $statusLabel = 'Anulată';
     }
 @endphp
 
 <section class="page-hero fade-up">
-    <span class="page-eyebrow">Fisa activitate</span>
+    <span class="page-eyebrow">Fișă activitate</span>
     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
         <h1 class="page-title mb-0">{{ $task->nume }}</h1>
         <span class="{{ $statusClass }}">{{ $statusLabel }}</span>
     </div>
-    <p class="page-subtitle">Vizualizeaza contextul complet si urmareste evolutia task-ului in timp.</p>
+    <p class="page-subtitle">Vizualizează contextul complet și urmărește evoluția task-ului în timp.</p>
 </section>
 
 <section class="content-card fade-up">
@@ -34,7 +34,7 @@
     <div class="row g-3 mb-4">
         <div class="col-md-6">
             <div class="info-tile">
-                <span class="info-label">Data crearii</span>
+                <span class="info-label">Data creării</span>
                 <span class="info-value">{{ $task->created_at->format('d M Y, H:i') }}</span>
             </div>
         </div>
@@ -47,8 +47,8 @@
     </div>
 
     <div class="d-flex flex-wrap gap-2 justify-content-end">
-        <a href="{{ route('tasks.index') }}" class="btn btn-outline-secondary">Inapoi la lista</a>
-        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-brand">Editeaza activitatea</a>
+        <a href="{{ route('tasks.index') }}" class="btn btn-outline-secondary">Înapoi la listă</a>
+        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-brand">Editează activitatea</a>
     </div>
 </section>
 @endsection

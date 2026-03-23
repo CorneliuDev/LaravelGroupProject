@@ -4,13 +4,13 @@
 
 @section('content')
 @php
-    $statusOptions = ['In curs', 'Finalizata', 'Anulata'];
+    $statusOptions = ['În curs', 'Finalizată', 'Anulată'];
 @endphp
 
 <section class="page-hero fade-up">
     <span class="page-eyebrow">Creare task</span>
-    <h1 class="page-title">Adauga o activitate noua</h1>
-    <p class="page-subtitle">Completeaza detaliile esentiale pentru o evidenta clara a proiectului.</p>
+    <h1 class="page-title">Adaugă o activitate nouă</h1>
+    <p class="page-subtitle">Completează detaliile esențiale pentru o evidență clară a proiectului.</p>
 </section>
 
 <div class="row justify-content-center">
@@ -18,7 +18,7 @@
         <section class="content-card form-card fade-up">
             @if($errors->any())
                 <div class="alert alert-danger" role="alert">
-                    <strong>Exista cateva campuri invalide:</strong>
+                    <strong>Există câteva câmpuri invalide:</strong>
                     <ul class="mb-0 mt-2">
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -31,7 +31,7 @@
                 @csrf
                 <div class="col-12">
                     <label for="nume" class="form-label">Nume activitate</label>
-                    <input id="nume" type="text" name="nume" value="{{ old('nume') }}" class="form-control" placeholder="Ex: Pregatire prezentare finala" required>
+                    <input id="nume" type="text" name="nume" value="{{ old('nume') }}" class="form-control" placeholder="Ex: Pregătire prezentare finală" required>
                 </div>
 
                 <div class="col-12">
@@ -43,14 +43,14 @@
                     <label for="stare" class="form-label">Status</label>
                     <select id="stare" name="stare" class="form-select" required>
                         @foreach($statusOptions as $status)
-                            <option value="{{ $status }}" {{ old('stare', 'In curs') === $status ? 'selected' : '' }}>{{ $status }}</option>
+                            <option value="{{ $status }}" {{ old('stare', 'În curs') === $status ? 'selected' : '' }}>{{ $status }}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <div class="col-12 d-flex flex-wrap justify-content-end gap-2 pt-2">
-                    <a href="{{ route('tasks.index') }}" class="btn btn-outline-secondary px-4">Renunta</a>
-                    <button type="submit" class="btn btn-brand px-4">Salveaza activitatea</button>
+                    <a href="{{ route('tasks.index') }}" class="btn btn-outline-secondary px-4">Renunță</a>
+                    <button type="submit" class="btn btn-brand px-4">Salvează activitatea</button>
                 </div>
             </form>
         </section>
